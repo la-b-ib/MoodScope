@@ -1,0 +1,37 @@
+{
+    "name": "MoodScope",
+    "version": "1.0",
+    "description": "Real-time sentiment analysis for social media with interactive UI and advanced charts",
+    "manifest_version": 3,
+    "permissions": ["activeTab", "storage", "scripting", "downloads"],
+    "host_permissions": [
+      "*://*.x.com/*",
+      "*://*.facebook.com/*",
+      "*://*.linkedin.com/*",
+      "*://*.reddit.com/*",
+      "*://*.instagram.com/*",
+      "*://*.youtube.com/*"
+    ],
+    "action": {
+      "default_popup": "popup.html"
+    },
+    "content_scripts": [
+      {
+        "matches": [
+          "*://*.x.com/*",
+          "*://*.facebook.com/*",
+          "*://*.linkedin.com/*",
+          "*://*.reddit.com/*",
+          "*://*.instagram.com/*",
+          "*://*.youtube.com/*"
+        ],
+        "js": ["content.js"],
+        "css": ["content.css"]
+      }
+    ],
+    "icons": {
+      "48": "icon48.png",
+      "128": "icon128.png"
+    }
+  }
+  

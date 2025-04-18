@@ -1,0 +1,69 @@
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+
+.sentiment-widget {
+  font-family: 'Roboto', Arial, sans-serif;
+  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 10px;
+  margin-left: 12px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(8px);
+  color: #333;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, background 0.3s;
+  cursor: default;
+}
+
+.sentiment-widget:hover {
+  transform: translateY(-2px);
+}
+
+.dark-mode .sentiment-widget {
+  background: rgba(40, 40, 40, 0.7);
+  color: #eee;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.sentiment-widget .material-icons {
+  font-size: 18px;
+  margin-right: 6px;
+}
+
+.sentiment-alert {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(248, 215, 218, 0.9);
+  color: #721c24;
+  padding: 12px 24px;
+  border-radius: 10px;
+  z-index: 1000;
+  font-family: 'Roboto', Arial, sans-serif;
+  font-size: 14px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.dark-mode .sentiment-alert {
+  background: rgba(200, 50, 50, 0.9);
+  color: #fff;
+}
+
+.animate-in {
+  animation: slideIn 0.3s ease-out;
+}
+
+.animate-out {
+  animation: slideOut 0.5s ease-in forwards;
+}
+
+@keyframes slideIn {
+  from { transform: translateY(-10px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes slideOut {
+  to { transform: translateY(-20px); opacity: 0; }
+}
