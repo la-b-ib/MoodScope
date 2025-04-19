@@ -1,347 +1,419 @@
-function debounce(func, wait) {
-    let timeout;
-    return function (...args) {
-      clearTimeout(timeout);
-      timeout = setTimeout(() => func.apply(this, args), wait);
+document.addEventListener('DOMContentLoaded', async function() {
+  // DOM Elements
+  const themeToggle = document.getElementById('themeToggle');
+  const analysisMode = document.getElementById('analysisMode');
+  const sensitivity = document.getElementById('sensitivity');
+  const sensitivityValue = document.getElementById('sensitivityValue');
+  const language = document.getElementById('language');
+  const chartType = document.getElementById('chartType');
+  const resultDisplay = document.getElementById('resultDisplay');
+  const ctx = document.getElementById('sentimentChart').getContext('2d');
+
+  // Initialize Chart
+  let sentimentChart = new Chart(ctx, {
+    type: 'line',
+    data: { labels: [], datasets: [] },
+    options: getChartOptions()
+  });
+
+  // Load saved settings
+  chrome.storage.local.get(['settings', 'analysisHistory'], function(result) {
+    const settings = result.settings || {};
+    const history = result.analysisHistory || [];
+    
+    // Apply settings
+    if (settings.theme) {
+      themeToggle.checked = settings.theme === 'dark';
+      document.body.classList.toggle('dark-mode', settings.theme === 'dark');
+    }
+    
+    if (settings.analysisMode) {
+      analysisMode.value = settings.analysisMode;
+    }
+    
+    if (settings.sensitivity) {
+      sensitivity.value = settings.sensitivity;
+      sensitivityValue.textContent = settings.sensitivity;
+    }
+    
+    if (settings.language) {
+      language.value = settings.language;
+    }
+    
+    if (settings.chartType) {
+      chartType.value = settings.chartType;
+      updateChart(history, settings.chartType);
+    }
+    
+    updateResultsDisplay(history);
+  });
+
+  // Theme Toggle
+  themeToggle.addEventListener('change', function() {
+    const isDark = this.checked;
+    document.body.classList.toggle('dark-mode', isDark);
+    saveSetting('theme', isDark ? 'dark' : 'light');
+    updateChartOptions();
+  });
+
+  // Analysis Controls
+  analysisMode.addEventListener('change', function() {
+    saveSetting('analysisMode', this.value);
+    analyzeCurrentTab();
+  });
+
+  sensitivity.addEventListener('input', function() {
+    const value = parseFloat(this.value);
+    sensitivityValue.textContent = value.toFixed(1);
+    saveSetting('sensitivity', value);
+  });
+
+  language.addEventListener('change', function() {
+    saveSetting('language', this.value);
+    analyzeCurrentTab();
+  });
+
+  chartType.addEventListener('change', function() {
+    saveSetting('chartType', this.value);
+    chrome.storage.local.get(['analysisHistory'], function(result) {
+      updateChart(result.analysisHistory || [], this.value);
+    }.bind(this));
+  });
+
+  // Enhanced Sentiment Analysis
+  async function analyzeText(text, mode = 'hybrid', lang = 'en') {
+    try {
+      // Initialize NLP with compromise
+      const nlp = (await import('https://cdn.jsdelivr.net/npm/compromise')).default;
+      let doc = nlp(text);
+      
+      // Enhanced sentiment analysis
+      let sentimentScore = 0;
+      let positiveCount = 0;
+      let negativeCount = 0;
+      let neutralCount = 0;
+      
+      // Tokenize and analyze each sentence
+      const sentences = doc.sentences().out('array');
+      sentences.forEach(sentence => {
+        const sentenceDoc = nlp(sentence);
+        
+        // Enhanced sentiment scoring
+        const sentiment = analyzeSentence(sentenceDoc, lang);
+        sentimentScore += sentiment.score;
+        
+        // Count sentiment types
+        if (sentiment.score > 0.2) positiveCount++;
+        else if (sentiment.score < -0.2) negativeCount++;
+        else neutralCount++;
+      });
+      
+      // Normalize score
+      sentimentScore = sentimentScore / Math.max(sentences.length, 1);
+      
+      // Determine emotion
+      const emotion = detectEmotion(text, sentimentScore, lang);
+      
+      return {
+        sentiment: {
+          score: parseFloat(sentimentScore.toFixed(2)),
+          label: getSentimentLabel(sentimentScore),
+          positive: positiveCount,
+          negative: negativeCount,
+          neutral: neutralCount
+        },
+        emotion,
+        text: text.substring(0, 200) + (text.length > 200 ? '...' : ''),
+        timestamp: Date.now()
+      };
+    } catch (error) {
+      console.error('Analysis error:', error);
+      return {
+        sentiment: { score: 0, label: 'neutral' },
+        emotion: 'neutral',
+        text: '',
+        timestamp: Date.now()
+      };
+    }
+  }
+
+  function analyzeSentence(doc, lang) {
+    // Implement language-specific analysis rules
+    let score = 0;
+    
+    // Positive terms
+    const positiveTerms = {
+      en: ['good', 'great', 'excellent', 'happy', 'love'],
+      es: ['bueno', 'excelente', 'feliz', 'amor'],
+      fr: ['bon', 'excellent', 'heureux', 'amour']
+    };
+    
+    // Negative terms
+    const negativeTerms = {
+      en: ['bad', 'terrible', 'awful', 'hate', 'sad'],
+      es: ['malo', 'terrible', 'odio', 'triste'],
+      fr: ['mauvais', 'terrible', 'haine', 'triste']
+    };
+    
+    // Analyze terms
+    positiveTerms[lang].forEach(term => {
+      if (doc.has(term)) score += 0.5;
+    });
+    
+    negativeTerms[lang].forEach(term => {
+      if (doc.has(term)) score -= 0.5;
+    });
+    
+    // Analyze modifiers
+    if (doc.has('very') || doc.has('really')) {
+      score *= 1.5;
+    }
+    
+    // Analyze negations
+    if (doc.has('not') || doc.has('no'))) {
+      score *= -0.8;
+    }
+    
+    // Analyze punctuation
+    if (doc.has('!')) score *= 1.2;
+    if (doc.has('?')) score *= 0.8;
+    
+    return { score: Math.min(Math.max(score, -1), 1) };
+  }
+
+  function detectEmotion(text, sentimentScore, lang) {
+    // Enhanced emotion detection
+    const emotions = {
+      en: {
+        happy: ['happy', 'joy', 'excited', 'awesome'],
+        angry: ['angry', 'mad', 'furious', 'hate'],
+        sad: ['sad', 'depressed', 'unhappy', 'cry'],
+        fearful: ['scared', 'fear', 'afraid', 'anxious'],
+        surprised: ['surprise', 'wow', 'amazing', 'shocked']
+      },
+      // Add other languages...
+    };
+    
+    const textLower = text.toLowerCase();
+    let detectedEmotion = 'neutral';
+    
+    // Check for specific emotion words
+    for (const [emotion, words] of Object.entries(emotions[lang])) {
+      if (words.some(word => textLower.includes(word))) {
+        detectedEmotion = emotion;
+        break;
+      }
+    }
+    
+    // Fallback to sentiment-based emotion
+    if (detectedEmotion === 'neutral') {
+      if (sentimentScore > 0.5) detectedEmotion = 'happy';
+      else if (sentimentScore < -0.5) detectedEmotion = 'angry';
+      else if (sentimentScore < 0) detectedEmotion = 'sad';
+    }
+    
+    return detectedEmotion;
+  }
+
+  function getSentimentLabel(score) {
+    if (score > 0.5) return 'very positive';
+    if (score > 0.2) return 'positive';
+    if (score < -0.5) return 'very negative';
+    if (score < -0.2) return 'negative';
+    return 'neutral';
+  }
+
+  // Data Visualization
+  function updateChart(history, type = 'line') {
+    const labels = [];
+    const sentimentData = [];
+    const emotionCounts = {
+      happy: 0,
+      angry: 0,
+      sad: 0,
+      fearful: 0,
+      surprised: 0,
+      neutral: 0
+    };
+    
+    // Process history data
+    history.slice(-30).forEach((item, index) => {
+      labels.push(new Date(item.timestamp).toLocaleTimeString());
+      sentimentData.push(item.sentiment.score);
+      
+      if (item.emotion && emotionCounts.hasOwnProperty(item.emotion)) {
+        emotionCounts[item.emotion]++;
+      }
+    });
+    
+    // Update chart based on type
+    if (type === 'line') {
+      sentimentChart.data.labels = labels;
+      sentimentChart.data.datasets = [{
+        label: 'Sentiment Score',
+        data: sentimentData,
+        borderColor: 'rgba(66, 133, 244, 1)',
+        backgroundColor: 'rgba(66, 133, 244, 0.1)',
+        borderWidth: 2,
+        tension: 0.1,
+        fill: true
+      }];
+      sentimentChart.options.scales.y.min = -1;
+      sentimentChart.options.scales.y.max = 1;
+    } else if (type === 'bar') {
+      sentimentChart.data.labels = ['Positive', 'Neutral', 'Negative'];
+      sentimentChart.data.datasets = [{
+        label: 'Sentiment Distribution',
+        data: [
+          history.filter(h => h.sentiment.score > 0.2).length,
+          history.filter(h => h.sentiment.score >= -0.2 && h.sentiment.score <= 0.2).length,
+          history.filter(h => h.sentiment.score < -0.2).length
+        ],
+        backgroundColor: [
+          'rgba(52, 168, 83, 0.7)',
+          'rgba(251, 188, 5, 0.7)',
+          'rgba(234, 67, 53, 0.7)'
+        ],
+        borderColor: [
+          'rgba(52, 168, 83, 1)',
+          'rgba(251, 188, 5, 1)',
+          'rgba(234, 67, 53, 1)'
+        ],
+        borderWidth: 1
+      }];
+    } else if (type === 'pie') {
+      sentimentChart.data.labels = Object.keys(emotionCounts);
+      sentimentChart.data.datasets = [{
+        label: 'Emotion Breakdown',
+        data: Object.values(emotionCounts),
+        backgroundColor: [
+          'rgba(52, 168, 83, 0.7)',
+          'rgba(234, 67, 53, 0.7)',
+          'rgba(66, 133, 244, 0.7)',
+          'rgba(251, 188, 5, 0.7)',
+          'rgba(171, 71, 188, 0.7)',
+          'rgba(120, 144, 156, 0.7)'
+        ],
+        borderWidth: 1
+      }];
+    }
+    
+    sentimentChart.type = type;
+    sentimentChart.update();
+  }
+
+  function getChartOptions() {
+    const isDark = document.body.classList.contains('dark-mode');
+    const textColor = isDark ? '#E8EAED' : '#202124';
+    const gridColor = isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)';
+    
+    return {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'top',
+          labels: { color: textColor }
+        },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              return `${context.dataset.label}: ${context.raw}`;
+            }
+          }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          grid: { color: gridColor },
+          ticks: { color: textColor }
+        },
+        x: {
+          grid: { color: gridColor },
+          ticks: { color: textColor }
+        }
+      }
     };
   }
-  
-  document.addEventListener("DOMContentLoaded", () => {
-    const toggle = document.getElementById("toggle");
-    const filter = document.getElementById("filter");
-    const sensitivity = document.getElementById("sensitivity");
-    const sensitivityValue = document.getElementById("sensitivity-value");
-    const customPositive = document.getElementById("customPositive");
-    const customNegative = document.getElementById("customNegative");
-    const addKeywords = document.getElementById("addKeywords");
-    const keywordList = document.getElementById("keywordList");
-    const highlight = document.getElementById("highlight");
-    const alerts = document.getElementById("alerts");
-    const exportBtn = document.getElementById("export");
-    const importBtn = document.getElementById("importBtn");
-    const importInput = document.getElementById("import");
-    const chartType = document.getElementById("chartType");
-    const theme = document.getElementById("theme");
-    const ctx = document.getElementById("sentimentChart").getContext("2d");
-  
-    let chart;
-  
-    chrome.storage.local.get(
-      [
-        "enabled",
-        "filter",
-        "customKeywords",
-        "highlight",
-        "alerts",
-        "sensitivity",
-        "sentimentHistory",
-        "theme"
-      ],
-      (data) => {
-        try {
-          toggle.checked = data.enabled !== false;
-          filter.value = data.filter || "all";
-          sensitivity.value = data.sensitivity || 0.5;
-          sensitivityValue.textContent = parseFloat(sensitivity.value).toFixed(1);
-          highlight.checked = data.highlight || false;
-          alerts.checked = data.alerts || false;
-          theme.value = data.theme || "auto";
-          updateKeywordList(data.customKeywords || { positive: {}, negative: {} });
-          updateChart(data.sentimentHistory || [], chartType.value);
-          updateTheme(data.theme || "auto");
-        } catch (err) {
-          console.error("Settings load error:", err);
-        }
-      }
-    );
-  
-    document.querySelectorAll(".toggle-section").forEach((header) => {
-      header.addEventListener("click", () => {
-        const section = header.parentElement;
-        section.classList.toggle("active");
-      });
-    });
-  
-    function updateTheme(themeValue) {
-      document.body.classList.remove("light-mode", "dark-mode");
-      if (themeValue === "auto") {
-        if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-          document.body.classList.add("dark-mode");
-        }
-      } else if (themeValue === "dark") {
-        document.body.classList.add("dark-mode");
-      } else {
-        document.body.classList.add("light-mode");
-      }
-      if (chart) {
-        chart.options.plugins.legend.labels.color = document.body.classList.contains("dark-mode") ? "#e0e0e0" : "#333";
-        chart.update();
-      }
+
+  function updateChartOptions() {
+    sentimentChart.options = getChartOptions();
+    sentimentChart.update();
+  }
+
+  // Results Display
+  function updateResultsDisplay(history) {
+    if (history.length === 0) {
+      resultDisplay.innerHTML = `
+        <div class="result-item">
+          <p>No analysis results yet.</p>
+          <p>Browse social media to see sentiment analysis.</p>
+        </div>
+      `;
+      return;
     }
-  
-    theme.addEventListener("change", () => {
-      const themeValue = theme.value;
-      chrome.storage.local.set({ theme: themeValue });
-      updateTheme(themeValue);
+    
+    const latest = history[history.length - 1];
+    let html = `
+      <div class="result-item sentiment-${latest.sentiment.label.replace(' ', '-')}">
+        <h3>${capitalizeFirstLetter(latest.sentiment.label)} Sentiment</h3>
+        <p>Score: <strong>${latest.sentiment.score}</strong></p>
+        <p>Detected Emotion: <strong>${capitalizeFirstLetter(latest.emotion)}</strong></p>
+        ${latest.text ? `<div class="text-sample"><p>${latest.text}</p></div>` : ''}
+      </div>
+    `;
+    
+    resultDisplay.innerHTML = html;
+  }
+
+  // Helper Functions
+  function saveSetting(key, value) {
+    chrome.storage.local.get(['settings'], function(result) {
+      const settings = result.settings || {};
+      settings[key] = value;
+      chrome.storage.local.set({ settings });
     });
-  
-    toggle.addEventListener("change", debounce(() => {
-      const enabled = toggle.checked;
-      chrome.storage.local.set({ enabled });
-      sendMessage({ toggle: enabled });
-    }, 200));
-  
-    filter.addEventListener("change", debounce(() => {
-      const filterValue = filter.value;
-      chrome.storage.local.set({ filter: filterValue });
-      sendMessage({ filter: filterValue });
-    }, 200));
-  
-    sensitivity.addEventListener("input", () => {
-      const sensValue = parseFloat(sensitivity.value);
-      sensitivityValue.textContent = sensValue.toFixed(1);
-      chrome.storage.local.set({ sensitivity: sensValue });
-      sendMessage({ sensitivity: sensValue });
-    });
-  
-    highlight.addEventListener("change", debounce(() => {
-      const highlightValue = highlight.checked;
-      chrome.storage.local.set({ highlight: highlightValue });
-      sendMessage({ highlight: highlightValue });
-    }, 200));
-  
-    alerts.addEventListener("change", debounce(() => {
-      const alertsValue = alerts.checked;
-      chrome.storage.local.set({ alerts: alertsValue });
-      sendMessage({ alerts: alertsValue });
-    }, 200));
-  
-    addKeywords.addEventListener("click", () => {
-      const pos = customPositive.value.trim().toLowerCase();
-      const neg = customNegative.value.trim().toLowerCase();
-      if (!pos && !neg) {
-        alert("Please enter at least one keyword.");
-        return;
-      }
-      try {
-        chrome.storage.local.get("customKeywords", (data) => {
-          const current = data.customKeywords || { positive: {}, negative: {} };
-          if (pos && !/^[a-z]+$/.test(pos)) {
-            alert("Positive keyword must contain only letters.");
-            return;
-          }
-          if (neg && !/^[a-z]+$/.test(neg)) {
-            alert("Negative keyword must contain only letters.");
-            return;
-          }
-          if (pos) current.positive[pos] = 1;
-          if (neg) current.negative[neg] = -1;
-          chrome.storage.local.set({ customKeywords: current }, () => {
-            updateKeywordList(current);
-            customPositive.value = "";
-            customNegative.value = "";
-            sendMessage({ customKeywords: current });
-          });
+  }
+
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
+  // Analyze current tab
+  async function analyzeCurrentTab() {
+    chrome.tabs.query({ active: true, currentWindow: true }, async function(tabs) {
+      if (tabs[0]) {
+        const results = await chrome.scripting.executeScript({
+          target: { tabId: tabs[0].id },
+          function: getPageTextContent
         });
-      } catch (err) {
-        console.error("Keyword add error:", err);
-        alert("Failed to add keywords.");
-      }
-    });
-  
-    keywordList.addEventListener("click", (e) => {
-      if (e.target.classList.contains("remove-keyword")) {
-        try {
-          const word = e.target.dataset.word;
-          const type = e.target.dataset.type;
-          chrome.storage.local.get("customKeywords", (data) => {
-            const current = data.customKeywords || { positive: {}, negative: {} };
-            delete current[type][word];
-            chrome.storage.local.set({ customKeywords: current }, () => {
-              updateKeywordList(current);
-              sendMessage({ customKeywords: current });
+        
+        if (results && results[0] && results[0].result) {
+          const analysis = await analyzeText(
+            results[0].result,
+            analysisMode.value,
+            language.value
+          );
+          
+          chrome.storage.local.get(['analysisHistory'], function(result) {
+            const history = result.analysisHistory || [];
+            history.push(analysis);
+            chrome.storage.local.set({ 
+              analysisHistory: history.slice(-100),
+              lastAnalysis: analysis
             });
-          });
-        } catch (err) {
-          console.error("Keyword remove error:", err);
-          alert("Failed to remove keyword.");
-        }
-      }
-    });
-  
-    exportBtn.addEventListener("click", () => {
-      try {
-        chrome.storage.local.get(
-          ["filter", "customKeywords", "highlight", "alerts", "sensitivity", "sentimentHistory", "theme"],
-          (data) => {
-            const json = JSON.stringify(data, null, 2);
-            const blob = new Blob([json], { type: "application/json" });
-            const url = URL.createObjectURL(blob);
-            chrome.downloads.download({
-              url,
-              filename: "moodscope_settings.json",
-              saveAs: true
-            });
-          }
-        );
-      } catch (err) {
-        console.error("Export error:", err);
-        alert("Failed to export settings.");
-      }
-    });
-  
-    importBtn.addEventListener("click", () => importInput.click());
-    importInput.addEventListener("change", () => {
-      try {
-        const file = importInput.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          try {
-            const data = JSON.parse(e.target.result);
-            if (!data.filter) throw new Error("Invalid JSON structure");
-            chrome.storage.local.set(data, () => {
-              location.reload();
-            });
-          } catch (err) {
-            console.error("Import error:", err);
-            alert("Invalid or corrupted JSON file.");
-          }
-        };
-        reader.readAsText(file);
-      } catch (err) {
-        console.error("File read error:", err);
-        alert("Failed to read file.");
-      }
-    });
-  
-    chartType.addEventListener("change", () => {
-      chrome.storage.local.get("sentimentHistory", (data) => {
-        updateChart(data.sentimentHistory || [], chartType.value);
-      });
-    });
-  
-    function updateKeywordList(customKeywords) {
-      try {
-        keywordList.innerHTML = "";
-        for (const [word, score] of Object.entries(customKeywords.positive)) {
-          const li = document.createElement("li");
-          li.innerHTML = `<span title="Positive keyword">${word} (Positive)</span> <button class="remove-keyword" data-word="${word}" data-type="positive">Remove</button>`;
-          keywordList.appendChild(li);
-        }
-        for (const [word, score] of Object.entries(customKeywords.negative)) {
-          const li = document.createElement("li");
-          li.innerHTML = `<span title="Negative keyword">${word} (Negative)</span> <button class="remove-keyword" data-word="${word}" data-type="negative">Remove</button>`;
-          keywordList.appendChild(li);
-        }
-      } catch (err) {
-        console.error("Keyword list update error:", err);
-      }
-    }
-  
-    function updateChart(history = [], type = "bar") {
-      try {
-        history = history.slice(-500);
-        const counts = {};
-        const dates = {};
-  
-        history.forEach((s) => {
-          const date = new Date(s.timestamp).toLocaleDateString();
-          counts[s.label] = (counts[s.label] || 0) + 1;
-          dates[date] = dates[date] || { Positive: 0, Negative: 0, Neutral: 0 };
-          dates[date][s.label]++;
-        });
-  
-        const labels = type === "bar" ? Object.keys(dates).slice(-7) : ["Positive", "Negative", "Neutral"];
-        const datasets =
-          type === "bar"
-            ? [
-                {
-                  label: "Positive",
-                  data: labels.map((d) => dates[d].Positive || 0),
-                  backgroundColor: "#d4edda"
-                },
-                {
-                  label: "Negative",
-                  data: labels.map((d) => dates[d].Negative || 0),
-                  backgroundColor: "#f8d7da"
-                },
-                {
-                  label: "Neutral",
-                  data: labels.map((d) => dates[d].Neutral || 0),
-                  backgroundColor: "#e9ecef"
-                }
-              ]
-            : [
-                {
-                  data: [
-                    counts.Positive || 0,
-                    counts.Negative || 0,
-                    counts.Neutral || 0
-                  ],
-                  backgroundColor: ["#d4edda", "#f8d7da", "#e9ecef"]
-                }
-              ];
-  
-        if (chart) chart.destroy();
-        chart = new Chart(ctx, {
-          type,
-          data: {
-            labels,
-            datasets
-          },
-          options: {
-            responsive: true,
-            animation: { duration: 500 },
-            plugins: {
-              legend: {
-                position: "bottom",
-                labels: { color: document.body.classList.contains("dark-mode") ? "#e0e0e0" : "#333" }
-              },
-              tooltip: { enabled: true }
-            },
-            scales: type === "bar" ? {
-              x: { title: { display: true, text: "Date" } },
-              y: { title: { display: true, text: "Count" }, beginAtZero: true }
-            } : {}
-          }
-        });
-      } catch (err) {
-        console.error("Chart update error:", err);
-      }
-    }
-  
-    const sendMessage = debounce((message) => {
-      try {
-        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-          if (!tabs[0]) return;
-          chrome.tabs.sendMessage(tabs[0].id, message, () => {
-            if (chrome.runtime.lastError) {
-              console.warn("Message send error:", chrome.runtime.lastError);
-            }
-            chrome.storage.local.get("sentimentHistory", (data) => {
-              updateChart(data.sentimentHistory || [], chartType.value);
-            });
-          });
-        });
-      } catch (err) {
-        console.error("Send message error:", err);
-      }
-    }, 200);
-  
-    chrome.storage.local.get("sentimentData", (data) => {
-      try {
-        if (data.sentimentData && data.sentimentData.length) {
-          chrome.storage.local.get("sentimentHistory", (hist) => {
-            const history = [...(hist.sentimentHistory || []), ...data.sentimentData].slice(-500);
-            chrome.storage.local.set({ sentimentHistory: history }, () => {
-              updateChart(history, chartType.value);
-            });
+            
+            updateResultsDisplay(history);
+            updateChart(history, chartType.value);
           });
         }
-      } catch (err) {
-        console.error("History update error:", err);
       }
     });
-  });
-  
+  }
+
+  // Function to get page text content
+  function getPageTextContent() {
+    return document.body.innerText;
+  }
+});
