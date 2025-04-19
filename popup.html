@@ -4,87 +4,66 @@
   <title>MoodScope Pro</title>
   <link rel="stylesheet" href="popup.css">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
   <div class="container">
-    <header>
-      <h1><span class="material-icons">insights</span> MoodScope Pro</h1>
-      <div class="header-controls">
-        <label class="theme-switch">
+    <header class="app-header">
+      <h1 class="app-title">
+        <span class="material-icons">sentiment_very_satisfied</span>
+        MoodScope Pro
+      </h1>
+      <div class="theme-toggle">
+        <label class="switch">
           <input type="checkbox" id="themeToggle">
           <span class="slider round"></span>
-          <span class="material-icons">dark_mode</span>
+          <span class="material-icons">brightness_4</span>
         </label>
       </div>
     </header>
 
-    <section class="control-panel">
-      <div class="toggle-section">
-        <label class="switch">
-          <input type="checkbox" id="globalToggle" checked>
-          <span class="slider"></span>
-        </label>
-        <span>Enable Analysis</span>
-      </div>
-
-      <div class="settings-section">
-        <h3><span class="material-icons">tune</span> Analysis Settings</h3>
-        <div class="form-group">
-          <label for="analysisMode">Analysis Mode:</label>
-          <select id="analysisMode">
-            <option value="sentiment">Sentiment Only</option>
-            <option value="emotion">Emotion Detection</option>
-            <option value="combined">Combined Analysis</option>
-          </select>
+    <main class="main-content">
+      <section class="control-section">
+        <div class="control-card">
+          <h2 class="section-title">
+            <span class="material-icons">toggle_on</span>
+            Analysis Controls
+          </h2>
+          <div class="form-group">
+            <label for="analysisMode">Analysis Mode</label>
+            <select id="analysisMode" class="form-control">
+              <option value="sentiment">Sentiment Analysis</option>
+              <option value="emotion">Emotion Detection</option>
+              <option value="advanced">Advanced Mode</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="sensitivity">Sensitivity: <span id="sensitivityValue">0.5</span></label>
+            <input type="range" id="sensitivity" min="0.1" max="1" step="0.1" value="0.5" class="form-slider">
+          </div>
         </div>
+      </section>
 
-        <div class="form-group">
-          <label for="language">Language:</label>
-          <select id="language">
-            <option value="en">English</option>
-            <option value="es">Spanish</option>
-            <option value="fr">French</option>
-          </select>
+      <section class="results-section">
+        <div class="results-card">
+          <h2 class="section-title">
+            <span class="material-icons">analytics</span>
+            Analysis Results
+          </h2>
+          <div class="result-display" id="resultDisplay">
+            <!-- Results will appear here -->
+          </div>
         </div>
+      </section>
+    </main>
 
-        <div class="form-group range-group">
-          <label for="sensitivity">Sensitivity: <span id="sensitivityValue">0.5</span></label>
-          <input type="range" id="sensitivity" min="0.1" max="1" step="0.1" value="0.5">
-        </div>
-      </div>
-
-      <div class="keywords-section">
-        <h3><span class="material-icons">tag</span> Custom Keywords</h3>
-        <div class="keyword-input-group">
-          <input type="text" id="newKeyword" placeholder="Add keyword...">
-          <select id="keywordType">
-            <option value="positive">Positive</option>
-            <option value="negative">Negative</option>
-            <option value="neutral">Neutral</option>
-          </select>
-          <button id="addKeyword"><span class="material-icons">add</span></button>
-        </div>
-        <div class="keyword-list" id="keywordList"></div>
-      </div>
-    </section>
-
-    <section class="visualization-section">
-      <h3><span class="material-icons">bar_chart</span> Sentiment Trends</h3>
-      <div class="chart-container">
-        <canvas id="sentimentChart"></canvas>
-      </div>
-      <div class="chart-controls">
-        <button id="exportData"><span class="material-icons">download</span> Export Data</button>
-        <button id="clearData"><span class="material-icons">delete</span> Clear Data</button>
-      </div>
-    </section>
-
-    <footer>
-      <p>MoodScope Pro v2.0</p>
+    <footer class="app-footer">
+      <p class="footer-text">MoodScope Pro v2.1</p>
     </footer>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="popup.js"></script>
 </body>
 </html>
