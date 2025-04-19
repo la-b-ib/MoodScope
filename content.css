@@ -1,69 +1,102 @@
-@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
-
-.sentiment-widget {
-  font-family: 'Roboto', Arial, sans-serif;
-  font-size: 12px;
+.moodscope-widget {
+  font-family: 'Roboto', sans-serif;
   display: inline-flex;
   align-items: center;
-  padding: 5px 10px;
-  margin-left: 12px;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(8px);
-  color: #333;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s, background 0.3s;
-  cursor: default;
+  padding: 4px 8px;
+  margin-left: 8px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(4px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  font-size: 12px;
 }
 
-.sentiment-widget:hover {
+.dark-mode .moodscope-widget {
+  background: rgba(30, 30, 30, 0.9);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.moodscope-widget:hover {
   transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
-.dark-mode .sentiment-widget {
-  background: rgba(40, 40, 40, 0.7);
-  color: #eee;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+.sentiment-badge {
+  display: flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 10px;
+  color: white;
+  font-weight: 500;
 }
 
-.sentiment-widget .material-icons {
-  font-size: 18px;
-  margin-right: 6px;
+.moodscope-widget .material-icons {
+  font-size: 16px;
+  margin-right: 4px;
 }
 
-.sentiment-alert {
+/* Emotion-specific styles */
+.moodscope-widget.happy {
+  background-color: rgba(76, 175, 80, 0.2);
+  color: #2e7d32;
+}
+
+.moodscope-widget.angry {
+  background-color: rgba(244, 67, 54, 0.2);
+  color: #c62828;
+}
+
+.moodscope-widget.sad {
+  background-color: rgba(33, 150, 243, 0.2);
+  color: #1565c0;
+}
+
+.moodscope-widget.excited {
+  background-color: rgba(255, 193, 7, 0.2);
+  color: #ff8f00;
+}
+
+/* Alert styles */
+.moodscope-alert {
   position: fixed;
   top: 20px;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(248, 215, 218, 0.9);
-  color: #721c24;
   padding: 12px 24px;
-  border-radius: 10px;
-  z-index: 1000;
-  font-family: 'Roboto', Arial, sans-serif;
+  border-radius: 8px;
+  z-index: 10000;
+  font-family: 'Roboto', sans-serif;
   font-size: 14px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-.dark-mode .sentiment-alert {
-  background: rgba(200, 50, 50, 0.9);
-  color: #fff;
-}
-
-.animate-in {
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
   animation: slideIn 0.3s ease-out;
 }
 
-.animate-out {
-  animation: slideOut 0.5s ease-in forwards;
+.moodscope-alert.warning {
+  background-color: #fff3e0;
+  color: #e65100;
+  border-left: 4px solid #fb8c00;
+}
+
+.moodscope-alert.positive {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  border-left: 4px solid #4caf50;
+}
+
+.moodscope-alert .material-icons {
+  margin-right: 8px;
 }
 
 @keyframes slideIn {
-  from { transform: translateY(-10px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+  from { opacity: 0; transform: translate(-50%, -20px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
 }
 
 @keyframes slideOut {
-  to { transform: translateY(-20px); opacity: 0; }
+  to { opacity: 0; transform: translate(-50%, -20px); }
 }
