@@ -1,7 +1,7 @@
 {
-  "name": "MoodScope Pro",
-  "version": "2.1",
-  "description": "Advanced sentiment analysis with optimal visibility",
+  "name": "MoodScope Pro+",
+  "version": "3.0",
+  "description": "Advanced sentiment analysis with enhanced accuracy and visualization",
   "manifest_version": 3,
   "permissions": ["activeTab", "storage"],
   "action": {
@@ -14,5 +14,10 @@
   "icons": {
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
-  }
+  },
+  "content_scripts": [{
+    "matches": ["<all_urls>"],
+    "js": ["content.js"],
+    "css": ["content.css"]
+  }]
 }
