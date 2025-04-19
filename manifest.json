@@ -1,39 +1,15 @@
 {
   "name": "MoodScope Pro",
-  "version": "2.0",
-  "description": "Advanced sentiment and emotion analysis for social media",
+  "version": "2.1",
+  "description": "Advanced sentiment analysis with optimal visibility",
   "manifest_version": 3,
-  "permissions": [
-    "activeTab",
-    "storage",
-    "scripting",
-    "downloads",
-    "alarms"
-  ],
-  "host_permissions": [
-    "*://*/*"
-  ],
+  "permissions": ["activeTab", "storage"],
   "action": {
     "default_popup": "popup.html",
     "default_icon": {
       "48": "icons/icon48.png",
       "128": "icons/icon128.png"
     }
-  },
-  "content_scripts": [
-    {
-      "matches": ["<all_urls>"],
-      "js": ["content.js"],
-      "css": ["content.css"],
-      "run_at": "document_idle"
-    }
-  ],
-  "web_accessible_resources": [{
-    "resources": ["icons/*"],
-    "matches": ["<all_urls>"]
-  }],
-  "background": {
-    "service_worker": "background.js"
   },
   "icons": {
     "48": "icons/icon48.png",
