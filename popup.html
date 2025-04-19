@@ -1,92 +1,89 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>MoodScope</title>
+  <title>MoodScope Pro</title>
   <link rel="stylesheet" href="popup.css">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons|Roboto" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
   <div class="container">
-    <h2><span class="material-icons">psychology</span> MoodScope</h2>
-    <div class="section">
-      <h3><span class="material-icons">power_settings_new</span> Enable Analysis</h3>
-      <label class="switch">
-        <input type="checkbox" id="toggle" checked>
-        <span class="slider"></span>
-      </label>
-    </div>
-    <div class="section collapsible">
-      <h3 class="toggle-section"><span class="material-icons">filter_list</span> Filter Comments</h3>
-      <div class="content">
-        <select id="filter">
-          <option value="all">All Comments</option>
-          <option value="positive">Positive Only</option>
-          <option value="negative">Negative Only</option>
-          <option value="neutral">Neutral Only</option>
-        </select>
-      </div>
-    </div>
-    <div class="section collapsible">
-      <h3 class="toggle-section"><span class="material-icons">tune</span> Sensitivity</h3>
-      <div class="content">
-        <input type="range" id="sensitivity" min="0.1" max="2" step="0.1" value="0.5">
-        <span id="sensitivity-value">0.5</span>
-      </div>
-    </div>
-    <div class="section collapsible">
-      <h3 class="toggle-section"><span class="material-icons">edit</span> Custom Keywords</h3>
-      <div class="content">
-        <input type="text" id="customPositive" placeholder="Positive word">
-        <input type="text" id="customNegative" placeholder="Negative word">
-        <button id="addKeywords"><span class="material-icons">add</span> Add Keyword</button>
-        <ul id="keywordList"></ul>
-      </div>
-    </div>
-    <div class="section collapsible">
-      <h3 class="toggle-section"><span class="material-icons">highlight</span> Highlight Comments</h3>
-      <div class="content">
-        <label class="switch">
-          <input type="checkbox" id="highlight">
-          <span class="slider"></span>
+    <header>
+      <h1><span class="material-icons">insights</span> MoodScope Pro</h1>
+      <div class="header-controls">
+        <label class="theme-switch">
+          <input type="checkbox" id="themeToggle">
+          <span class="slider round"></span>
+          <span class="material-icons">dark_mode</span>
         </label>
       </div>
-    </div>
-    <div class="section collapsible">
-      <h3 class="toggle-section"><span class="material-icons">notifications</span> Negative Alerts</h3>
-      <div class="content">
+    </header>
+
+    <section class="control-panel">
+      <div class="toggle-section">
         <label class="switch">
-          <input type="checkbox" id="alerts">
+          <input type="checkbox" id="globalToggle" checked>
           <span class="slider"></span>
         </label>
+        <span>Enable Analysis</span>
       </div>
-    </div>
-    <div class="section collapsible">
-      <h3 class="toggle-section"><span class="material-icons">insights</span> Sentiment Trends</h3>
-      <div class="content">
-        <select id="chartType">
-          <option value="bar">Bar Chart (Trends)</option>
-          <option value="pie">Pie Chart (Current)</option>
-        </select>
-        <canvas id="sentimentChart" height="150"></canvas>
+
+      <div class="settings-section">
+        <h3><span class="material-icons">tune</span> Analysis Settings</h3>
+        <div class="form-group">
+          <label for="analysisMode">Analysis Mode:</label>
+          <select id="analysisMode">
+            <option value="sentiment">Sentiment Only</option>
+            <option value="emotion">Emotion Detection</option>
+            <option value="combined">Combined Analysis</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="language">Language:</label>
+          <select id="language">
+            <option value="en">English</option>
+            <option value="es">Spanish</option>
+            <option value="fr">French</option>
+          </select>
+        </div>
+
+        <div class="form-group range-group">
+          <label for="sensitivity">Sensitivity: <span id="sensitivityValue">0.5</span></label>
+          <input type="range" id="sensitivity" min="0.1" max="1" step="0.1" value="0.5">
+        </div>
       </div>
-    </div>
-    <div class="section collapsible">
-      <h3 class="toggle-section"><span class="material-icons">import_export</span> Data Management</h3>
-      <div class="content">
-        <button id="export"><span class="material-icons">file_download</span> Export Settings</button>
-        <input type="file" id="import" accept=".json" style="display: none;">
-        <button id="importBtn"><span class="material-icons">file_upload</span> Import Settings</button>
+
+      <div class="keywords-section">
+        <h3><span class="material-icons">tag</span> Custom Keywords</h3>
+        <div class="keyword-input-group">
+          <input type="text" id="newKeyword" placeholder="Add keyword...">
+          <select id="keywordType">
+            <option value="positive">Positive</option>
+            <option value="negative">Negative</option>
+            <option value="neutral">Neutral</option>
+          </select>
+          <button id="addKeyword"><span class="material-icons">add</span></button>
+        </div>
+        <div class="keyword-list" id="keywordList"></div>
       </div>
-    </div>
-    <div class="section">
-      <h3><span class="material-icons">dark_mode</span> Theme</h3>
-      <select id="theme">
-        <option value="auto">Auto (System)</option>
-        <option value="light">Light</option>
-        <option value="dark">Dark</option>
-      </select>
-    </div>
+    </section>
+
+    <section class="visualization-section">
+      <h3><span class="material-icons">bar_chart</span> Sentiment Trends</h3>
+      <div class="chart-container">
+        <canvas id="sentimentChart"></canvas>
+      </div>
+      <div class="chart-controls">
+        <button id="exportData"><span class="material-icons">download</span> Export Data</button>
+        <button id="clearData"><span class="material-icons">delete</span> Clear Data</button>
+      </div>
+    </section>
+
+    <footer>
+      <p>MoodScope Pro v2.0</p>
+    </footer>
   </div>
+
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="popup.js"></script>
 </body>
