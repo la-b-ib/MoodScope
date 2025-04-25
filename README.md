@@ -73,7 +73,7 @@ We welcome contributions! Please follow:
 2. Test changes thoroughly.  
 3. Submit a **Pull Request** with a clear description.  
 
-*See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
 
 ---
 
@@ -93,3 +93,16 @@ A: No—all analysis happens locally in your browser.
 **Q: Can I suggest a new platform?**  
 A: Yes! Open an [Issue](issues) with the platform details.  
 
+## Contact
+
+- **Developer**: Labib Bin Shahed
+- **Email**: [labib-x@protonmail.com](mailto:labib-x@protonmail.com)  
+- **GitHub**: [github.com/la-b-ib](https://github.com/la-b-ib)
+
+---
+
+## License
+
+This project is licensed under the terms of the MIT license. See the [LICENSE](LICENSE) file for details.
+
+---
