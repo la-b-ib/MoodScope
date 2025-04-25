@@ -1,0 +1,118 @@
+
+```yaml
+name: MoodScope CI/CD
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm test  # Replace with your test command (e.g., Jest, Mocha)
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build extension
+        run: |
+          npm run build  # Replace with your build command (e.g., webpack)
+          zip -r moodscope.zip dist/  # Package for deployment
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: moodscope-extension
+          path: moodscope.zip
+
+  deploy:
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: moodscope-extension
+
+      - name: Deploy to Chrome Web Store
+        uses: tanchekwei/chrome-extension-upload@v1
+        with:
+          client-id: ${{ secrets.CHROME_CLIENT_ID }}
+          client-secret: ${{ secrets.CHROME_CLIENT_SECRET }}
+          refresh-token: ${{ secrets.CHROME_REFRESH_TOKEN }}
+          extension-id: ${{ secrets.CHROME_EXTENSION_ID }}
+          zip-path: moodscope.zip
+          publish: true  # Set to false for draft uploads
+```
+
+---
+
+### Key Features of This Workflow:
+1. **Automated Testing**:
+   - Runs on every `push`/`PR` to `main`.
+   - Uses Node.js + npm for test execution.
+
+2. **Build & Packaging**:
+   - Zips the extension into `moodscope.zip`.
+
+3. **Chrome Web Store Deployment**:
+   - Uses [tanchekwei/chrome-extension-upload](https://github.com/marketplace/actions/chrome-web-store-upload) action.
+   - Requires Chrome API secrets (set in GitHub Secrets).
+
+4. **Artifact Handling**:
+   - Stores the built extension as a downloadable artifact.
+
+---
+
+### Setup Instructions:
+1. **Secrets Required** (in GitHub repo → Settings → Secrets):
+   - `CHROME_CLIENT_ID`
+   - `CHROME_CLIENT_SECRET`
+   - `CHROME_REFRESH_TOKEN` ([how to get](https://developer.chrome.com/docs/webstore/using_webstore_api/))
+   - `CHROME_EXTENSION_ID` (from Chrome Developer Dashboard)
+
+2. **Adapt for Your Project**:
+   - Replace `npm test`/`npm run build` with your actual commands.
+   - Remove the `deploy` job if not publishing to Chrome Web Store.
+
+3. **Optional Add-ons**:
+   - Add ESLint/Prettier checks.
+   - Integrate Lighthouse for performance audits.
+
+---
+
+### Example Alternative Workflow (Testing Only):
+```yaml
+name: MoodScope Tests
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm install
+      - run: npm test
+```
