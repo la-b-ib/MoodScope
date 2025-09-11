@@ -170,7 +170,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     }
     
     // Analyze negations
-    if (doc.has('not') || doc.has('no'))) {
+    if (doc.has('not') || doc.has('no')) {
       score *= -0.8;
     }
     

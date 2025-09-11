@@ -3,7 +3,10 @@
   "version": "3.0",
   "description": "Advanced sentiment analysis with enhanced accuracy and visualization",
   "manifest_version": 3,
-  "permissions": ["activeTab", "storage"],
+  "permissions": ["activeTab", "storage", "scripting", "downloads"],
+  "background": {
+    "service_worker": "background.js"
+  },
   "action": {
     "default_popup": "popup.html",
     "default_icon": {

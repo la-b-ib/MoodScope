@@ -12,6 +12,7 @@ class MoodScopeAnalyzer {
   async init() {
     await this.loadSettings();
     this.setupObserver();
+    this.setupMessageListener();
     this.analyzeVisibleContent();
   }
 
@@ -147,6 +148,15 @@ class MoodScopeAnalyzer {
       }
     });
   }
+
+  // Listen for settings changes
+  setupMessageListener() {
+    chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+      if (message.type === 'settingsUpdate') {
+        this.settings = { ...this.settings, ...message.settings };
+      }
+    });
+  }
 }
 
 // Initialize when DOM is ready
@@ -155,10 +165,3 @@ if (document.readyState === 'loading') {
 } else {
   new MoodScopeAnalyzer();
 }
-
-// Listen for settings changes
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.type === 'settingsUpdate') {
-    this.settings = { ...this.settings, ...message.settings };
-  }
-});
