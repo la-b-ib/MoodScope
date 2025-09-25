@@ -1,10 +1,12 @@
-# MoodScope - Professional Sentiment Analysis Chrome Extension
+# MoodScope <a href=""><img align="right" width="150" height="150" src="https://raw.githubusercontent.com/la-b-ib/MoodScope/main/preview/gif/bar-chart.gif"></a>
+
+**MoodScope** is an industry-standard Chrome extension that provides real-time sentiment analysis across major social media platforms with advanced analytics, customizable notifications, and comprehensive data management.
 
 [![Chrome Extension](https://img.shields.io/badge/Chrome-Extension-4285F4?style=flat-square&logo=google-chrome&logoColor=white)](https://chrome.google.com/webstore)
 [![Manifest V3](https://img.shields.io/badge/Manifest-V3-green?style=flat-square)](https://developer.chrome.com/docs/extensions/mv3/)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
-
- **MoodScope** is an industry-standard Chrome extension that provides real-time sentiment analysis across major social media platforms with advanced analytics, customizable notifications, and comprehensive data management.
+<hr>
+ 
 
 ## 🚀 Features Overview
 
