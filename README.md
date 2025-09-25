@@ -6,15 +6,16 @@
 [![Manifest V3](https://img.shields.io/badge/Manifest-V3-green?style=flat-square)](https://developer.chrome.com/docs/extensions/mv3/)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
 <hr>
- 
-<hr>
 
 ## Extention Preview
 
 <p align="left">
-  <img src="https://raw.githubusercontent.com/la-b-ib/DuskProbe/main/preview/img/shell%20report/desktop%20(8).png" width="32%" />
-  <img src="https://raw.githubusercontent.com/la-b-ib/DuskProbe/main/preview/img/shell%20report/desktop%20(9).png" width="32%" />
-  <img src="https://raw.githubusercontent.com/la-b-ib/DuskProbe/main/preview/img/shell%20report/desktop%20(10).png" width="32%" />    
+  <img src="https://raw.githubusercontent.com/la-b-ib/MoodScope/main/preview/img/desktop.png" width="50%" />
+  <img src="https://raw.githubusercontent.com/la-b-ib/MoodScope/main/preview/img/desktop%20(1).png" width="49%" />    
+</p>
+<p align="left">
+  <img src="https://raw.githubusercontent.com/la-b-ib/MoodScope/main/preview/img/desktop%20(2).png" width="49%" />
+  <img src="https://raw.githubusercontent.com/la-b-ib/MoodScope/main/preview/img/desktop%20(3).png" width="50%" />    
 </p>
 
 ## Core Functionality
