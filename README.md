@@ -221,7 +221,7 @@ notifications: {
 ```
 <hr>
 
-## ⚡ Performance Optimizations
+##  Performance Optimizations
 
 #### Background Processing
 - **Service Worker**: Efficient background task management
@@ -253,11 +253,11 @@ notifications: {
 ```json
 {
   "permissions": [
-    "activeTab",      // Access current tab for analysis
-    "storage",        // Save user preferences and data
-    "notifications",  // Display system notifications
-    "scripting",      // Inject content scripts
-    "tabs"           // Real site detection
+    "activeTab",      
+    "storage",       
+    "notifications", 
+    "scripting",      
+    "tabs"          
   ]
 }
 ```
