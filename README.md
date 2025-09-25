@@ -8,9 +8,8 @@
 <hr>
  
 
-## 🚀 Features Overview
+## Core Functionality
 
-### Core Functionality
 - **Real-time Sentiment Analysis**: Advanced sentiment detection across 6 major social platforms
 - **Multi-Platform Integration**: Twitter/X, Facebook, Instagram, LinkedIn, Reddit, YouTube
 - **Professional Dashboard**: 4-tab interface with comprehensive analytics
@@ -18,8 +17,9 @@
 - **Data Export System**: JSON export for analytics, history, and complete backups
 - **Theme System**: Dark/Light mode with persistent preferences
 - **Notification System**: Smart alerts with keyword monitoring and sentiment thresholds
-
-### Professional Features (15+)
+<hr>
+  
+## Professional Features
 1. **Tab Navigation System** - Professional multi-tab interface
 2. **Advanced Sentiment Analysis** - Real-time content analysis with confidence scoring
 3. **Auto-Analysis Mode** - Background processing with 30-second intervals
