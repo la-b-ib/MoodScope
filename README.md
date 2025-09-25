@@ -7,6 +7,15 @@
 [![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
 <hr>
  
+<hr>
+
+## Extention Preview
+
+<p align="left">
+  <img src="https://raw.githubusercontent.com/la-b-ib/DuskProbe/main/preview/img/shell%20report/desktop%20(8).png" width="32%" />
+  <img src="https://raw.githubusercontent.com/la-b-ib/DuskProbe/main/preview/img/shell%20report/desktop%20(9).png" width="32%" />
+  <img src="https://raw.githubusercontent.com/la-b-ib/DuskProbe/main/preview/img/shell%20report/desktop%20(10).png" width="32%" />    
+</p>
 
 ## Core Functionality
 
