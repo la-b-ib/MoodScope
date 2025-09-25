@@ -1,0 +1,591 @@
+/**
+ * MoodScope Content Script Styles
+ * Provides sentiment highlighting and widget styling with theme support
+ * Author: Labib Bin Shahed
+ */
+
+/* Import Material Icons */
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+
+/* CSS Variables for theming - Default light theme */
+:root {
+  /* Primary colors */
+  --moodscope-primary: #1976D2;
+  --moodscope-primary-variant: #1565C0;
+  --moodscope-secondary: #03DAC6;
+  --moodscope-secondary-variant: #018786;
+  
+  /* Surface colors */
+  --moodscope-background: #FFFFFF;
+  --moodscope-surface: #FFFFFF;
+  --moodscope-error: #B00020;
+  
+  /* On colors */
+  --moodscope-on-primary: #FFFFFF;
+  --moodscope-on-secondary: #000000;
+  --moodscope-on-background: #000000;
+  --moodscope-on-surface: #000000;
+  --moodscope-on-error: #FFFFFF;
+  
+  /* Sentiment colors */
+  --moodscope-positive: #4CAF50;
+  --moodscope-neutral: #FF9800;
+  --moodscope-negative: #F44336;
+  
+  /* UI elements */
+  --moodscope-border: #E0E0E0;
+  --moodscope-divider: #E0E0E0;
+  --moodscope-disabled: #9E9E9E;
+  --moodscope-placeholder: #757575;
+  
+  /* Translucent overlays */
+  --moodscope-overlay: rgba(255, 255, 255, 0.95);
+  --moodscope-backdrop: rgba(0, 0, 0, 0.5);
+  
+  /* Sentiment highlights */
+  --moodscope-positive-highlight: rgba(76, 175, 80, 0.15);
+  --moodscope-neutral-highlight: rgba(255, 152, 0, 0.15);
+  --moodscope-negative-highlight: rgba(244, 67, 54, 0.15);
+  
+  /* Shadows */
+  --moodscope-elevation1: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  --moodscope-elevation2: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  --moodscope-elevation3: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+  --moodscope-elevation4: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+  --moodscope-elevation5: 0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.22);
+  
+  /* Theme indicators */
+  --moodscope-theme: 'light';
+  --moodscope-is-dark: 0;
+}
+
+/* Dark theme overrides */
+body.moodscope-dark {
+  --moodscope-primary: #BB86FC;
+  --moodscope-primary-variant: #3700B3;
+  --moodscope-secondary: #03DAC6;
+  --moodscope-secondary-variant: #03DAC6;
+  
+  --moodscope-background: #121212;
+  --moodscope-surface: #1E1E1E;
+  --moodscope-error: #CF6679;
+  
+  --moodscope-on-primary: #000000;
+  --moodscope-on-secondary: #000000;
+  --moodscope-on-background: #FFFFFF;
+  --moodscope-on-surface: #FFFFFF;
+  --moodscope-on-error: #000000;
+  
+  --moodscope-positive: #66BB6A;
+  --moodscope-neutral: #FFB74D;
+  --moodscope-negative: #EF5350;
+  
+  --moodscope-border: #404040;
+  --moodscope-divider: #404040;
+  --moodscope-disabled: #616161;
+  --moodscope-placeholder: #9E9E9E;
+  
+  --moodscope-overlay: rgba(30, 30, 30, 0.95);
+  --moodscope-backdrop: rgba(0, 0, 0, 0.7);
+  
+  --moodscope-positive-highlight: rgba(102, 187, 106, 0.15);
+  --moodscope-neutral-highlight: rgba(255, 183, 77, 0.15);
+  --moodscope-negative-highlight: rgba(239, 83, 80, 0.15);
+  
+  --moodscope-elevation1: 0 1px 3px rgba(0, 0, 0, 0.24), 0 1px 2px rgba(0, 0, 0, 0.48);
+  --moodscope-elevation2: 0 3px 6px rgba(0, 0, 0, 0.32), 0 3px 6px rgba(0, 0, 0, 0.46);
+  --moodscope-elevation3: 0 10px 20px rgba(0, 0, 0, 0.38), 0 6px 6px rgba(0, 0, 0, 0.46);
+  --moodscope-elevation4: 0 14px 28px rgba(0, 0, 0, 0.50), 0 10px 10px rgba(0, 0, 0, 0.44);
+  --moodscope-elevation5: 0 19px 38px rgba(0, 0, 0, 0.60), 0 15px 12px rgba(0, 0, 0, 0.44);
+  
+  --moodscope-theme: 'dark';
+  --moodscope-is-dark: 1;
+}
+
+/* Auto dark mode support */
+@media (prefers-color-scheme: dark) {
+  body:not(.moodscope-light):not(.moodscope-dark) {
+    --moodscope-primary: #BB86FC;
+    --moodscope-primary-variant: #3700B3;
+    --moodscope-secondary: #03DAC6;
+    --moodscope-secondary-variant: #03DAC6;
+    
+    --moodscope-background: #121212;
+    --moodscope-surface: #1E1E1E;
+    --moodscope-error: #CF6679;
+    
+    --moodscope-on-primary: #000000;
+    --moodscope-on-secondary: #000000;
+    --moodscope-on-background: #FFFFFF;
+    --moodscope-on-surface: #FFFFFF;
+    --moodscope-on-error: #000000;
+    
+    --moodscope-positive: #66BB6A;
+    --moodscope-neutral: #FFB74D;
+    --moodscope-negative: #EF5350;
+    
+    --moodscope-border: #404040;
+    --moodscope-divider: #404040;
+    --moodscope-disabled: #616161;
+    --moodscope-placeholder: #9E9E9E;
+    
+    --moodscope-overlay: rgba(30, 30, 30, 0.95);
+    --moodscope-backdrop: rgba(0, 0, 0, 0.7);
+    
+    --moodscope-positive-highlight: rgba(102, 187, 106, 0.15);
+    --moodscope-neutral-highlight: rgba(255, 183, 77, 0.15);
+    --moodscope-negative-highlight: rgba(239, 83, 80, 0.15);
+    
+    --moodscope-elevation1: 0 1px 3px rgba(0, 0, 0, 0.24), 0 1px 2px rgba(0, 0, 0, 0.48);
+    --moodscope-elevation2: 0 3px 6px rgba(0, 0, 0, 0.32), 0 3px 6px rgba(0, 0, 0, 0.46);
+    --moodscope-elevation3: 0 10px 20px rgba(0, 0, 0, 0.38), 0 6px 6px rgba(0, 0, 0, 0.46);
+    --moodscope-elevation4: 0 14px 28px rgba(0, 0, 0, 0.50), 0 10px 10px rgba(0, 0, 0, 0.44);
+    --moodscope-elevation5: 0 19px 38px rgba(0, 0, 0, 0.60), 0 15px 12px rgba(0, 0, 0, 0.44);
+    
+    --moodscope-theme: 'dark';
+    --moodscope-is-dark: 1;
+  }
+}
+
+/* Base sentiment highlighting */
+.moodscope-highlighted {
+  position: relative;
+  transition: all 0.3s ease;
+  border-radius: 4px;
+  padding: 2px 4px;
+  margin: 1px 0;
+}
+
+/* Sentiment-specific highlighting with theme-aware colors */
+.moodscope-positive,
+.moodscope-sentiment-positive {
+  background-color: var(--moodscope-positive-highlight) !important;
+  border-left: 3px solid var(--moodscope-positive) !important;
+  box-shadow: var(--moodscope-elevation1) !important;
+  transition: all 0.3s ease !important;
+}
+
+.moodscope-negative,
+.moodscope-sentiment-negative {
+  background-color: var(--moodscope-negative-highlight) !important;
+  border-left: 3px solid var(--moodscope-negative) !important;
+  box-shadow: var(--moodscope-elevation1) !important;
+  transition: all 0.3s ease !important;
+}
+
+.moodscope-neutral,
+.moodscope-sentiment-neutral {
+  background-color: var(--moodscope-neutral-highlight) !important;
+  border-left: 3px solid var(--moodscope-neutral) !important;
+  box-shadow: var(--moodscope-elevation1) !important;
+  transition: all 0.3s ease !important;
+}
+
+/* Hover effects for highlighted content */
+.moodscope-highlighted:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--moodscope-elevation2) !important;
+}
+
+.moodscope-positive:hover,
+.moodscope-sentiment-positive:hover {
+  filter: brightness(1.1);
+}
+
+.moodscope-negative:hover,
+.moodscope-sentiment-negative:hover {
+  filter: brightness(1.1);
+}
+
+.moodscope-neutral:hover,
+.moodscope-sentiment-neutral:hover {
+  filter: brightness(1.1);
+}
+
+/* Sentiment indicator widget */
+.moodscope-sentiment-indicator {
+  position: absolute !important;
+  top: 8px !important;
+  right: 8px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  background: var(--moodscope-overlay) !important;
+  backdrop-filter: blur(10px) !important;
+  border-radius: 16px !important;
+  padding: 4px 8px !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  box-shadow: var(--moodscope-elevation2) !important;
+  z-index: 1000 !important;
+  transition: all 0.3s ease !important;
+  cursor: pointer !important;
+  user-select: none !important;
+  color: var(--moodscope-on-surface) !important;
+  border: 1px solid var(--moodscope-border) !important;
+}
+
+/* Sentiment indicator hover effect */
+.moodscope-sentiment-indicator:hover {
+  transform: scale(1.05) !important;
+  box-shadow: var(--moodscope-elevation3) !important;
+}
+
+/* Material Icons in sentiment indicator */
+.moodscope-sentiment-indicator .material-icons {
+  font-size: 16px !important;
+  line-height: 1 !important;
+}
+
+/* Sentiment-specific indicator colors */
+.moodscope-sentiment-indicator.positive {
+  border-color: var(--moodscope-positive) !important;
+}
+
+.moodscope-sentiment-indicator.positive .material-icons {
+  color: var(--moodscope-positive) !important;
+}
+
+.moodscope-sentiment-indicator.negative {
+  border-color: var(--moodscope-negative) !important;
+}
+
+.moodscope-sentiment-indicator.negative .material-icons {
+  color: var(--moodscope-negative) !important;
+}
+
+.moodscope-sentiment-indicator.neutral {
+  border-color: var(--moodscope-neutral) !important;
+}
+
+.moodscope-sentiment-indicator.neutral .material-icons {
+  color: var(--moodscope-neutral) !important;
+}
+
+/* Sentiment score styling */
+.moodscope-sentiment-indicator .sentiment-score {
+  font-family: 'Roboto Mono', monospace !important;
+  font-size: 11px !important;
+  opacity: 0.8 !important;
+}
+
+/* Content type badge */
+.moodscope-sentiment-indicator .content-type {
+  background: var(--moodscope-backdrop) !important;
+  border-radius: 8px !important;
+  padding: 2px 6px !important;
+  font-size: 10px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  opacity: 0.7 !important;
+}
+
+/* Floating Action Button (FAB) for quick filtering */
+.moodscope-fab,
+.moodscope-filter-fab {
+  position: fixed !important;
+  bottom: 20px !important;
+  right: 20px !important;
+  width: 56px !important;
+  height: 56px !important;
+  border-radius: 50% !important;
+  background-color: var(--moodscope-primary) !important;
+  color: var(--moodscope-on-primary) !important;
+  border: none !important;
+  box-shadow: var(--moodscope-elevation2) !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  z-index: 10000 !important;
+  transition: all 0.3s ease !important;
+  font-family: 'Material Icons' !important;
+  font-size: 24px !important;
+}
+
+.moodscope-fab:hover,
+.moodscope-filter-fab:hover {
+  transform: scale(1.1) !important;
+  box-shadow: var(--moodscope-elevation3) !important;
+}
+
+.moodscope-fab:active,
+.moodscope-filter-fab:active {
+  transform: scale(0.95) !important;
+}
+
+/* Filter menu */
+.moodscope-filter-menu {
+  position: fixed !important;
+  bottom: 90px !important;
+  right: 20px !important;
+  background-color: var(--moodscope-surface) !important;
+  color: var(--moodscope-on-surface) !important;
+  backdrop-filter: blur(10px) !important;
+  border-radius: 12px !important;
+  padding: 8px !important;
+  box-shadow: var(--moodscope-elevation4) !important;
+  z-index: 10001 !important;
+  display: none !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+  min-width: 120px !important;
+  border: 1px solid var(--moodscope-border) !important;
+  opacity: 0;
+  transform: translateY(10px) scale(0.95);
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.moodscope-filter-menu.show {
+  display: flex !important;
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.moodscope-filter-option {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 8px 12px !important;
+  border-radius: 8px !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+}
+
+.moodscope-filter-option:hover {
+  background-color: var(--moodscope-backdrop) !important;
+}
+
+.moodscope-filter-option.active {
+  background-color: var(--moodscope-primary) !important;
+  color: var(--moodscope-on-primary) !important;
+}
+
+.moodscope-filter-option .material-icons {
+  font-size: 18px !important;
+}
+
+/* Platform-specific adjustments */
+
+/* Twitter/X specific */
+[data-testid="tweet"] .moodscope-sentiment-indicator {
+  top: 12px !important;
+  right: 12px !important;
+}
+
+/* Facebook specific */
+[data-pagelet="FeedUnit"] .moodscope-sentiment-indicator,
+[role="article"] .moodscope-sentiment-indicator {
+  top: 16px !important;
+  right: 16px !important;
+}
+
+/* LinkedIn specific */
+.feed-shared-update-v2 .moodscope-sentiment-indicator {
+  top: 12px !important;
+  right: 12px !important;
+}
+
+/* Reddit specific */
+[data-testid="post-content"] .moodscope-sentiment-indicator {
+  top: 8px !important;
+  right: 8px !important;
+}
+
+/* Instagram specific */
+article[role="presentation"] .moodscope-sentiment-indicator {
+  top: 12px !important;
+  right: 12px !important;
+}
+
+/* YouTube specific */
+ytd-comment-thread-renderer .moodscope-sentiment-indicator,
+ytd-comment-renderer .moodscope-sentiment-indicator {
+  top: 8px !important;
+  right: 8px !important;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .moodscope-sentiment-indicator {
+    padding: 3px 6px !important;
+    font-size: 11px !important;
+  }
+  
+  .moodscope-sentiment-indicator .material-icons {
+    font-size: 14px !important;
+  }
+  
+  .moodscope-fab,
+  .moodscope-filter-fab {
+    width: 48px !important;
+    height: 48px !important;
+    bottom: 16px !important;
+    right: 16px !important;
+  }
+  
+  .moodscope-filter-menu {
+    bottom: 76px !important;
+    right: 16px !important;
+  }
+}
+
+/* Animation keyframes */
+@keyframes moodscope-pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes moodscope-fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes moodscope-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes moodscope-theme-transition {
+  from {
+    opacity: 0.8;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Apply animations */
+.moodscope-sentiment-indicator {
+  animation: moodscope-fadeIn 0.3s ease !important;
+}
+
+.moodscope-highlighted {
+  animation: moodscope-fadeIn 0.5s ease !important;
+}
+
+/* Theme transition animation */
+.moodscope-theme-transitioning * {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease !important;
+}
+
+.moodscope-theme-transitioning {
+  animation: moodscope-theme-transition 0.3s ease;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --moodscope-positive-highlight: rgba(76, 175, 80, 0.3);
+    --moodscope-neutral-highlight: rgba(255, 152, 0, 0.3);
+    --moodscope-negative-highlight: rgba(244, 67, 54, 0.3);
+  }
+  
+  body.moodscope-dark {
+    --moodscope-positive-highlight: rgba(102, 187, 106, 0.3);
+    --moodscope-neutral-highlight: rgba(255, 183, 77, 0.3);
+    --moodscope-negative-highlight: rgba(239, 83, 80, 0.3);
+  }
+  
+  .moodscope-positive,
+  .moodscope-sentiment-positive,
+  .moodscope-neutral,
+  .moodscope-sentiment-neutral,
+  .moodscope-negative,
+  .moodscope-sentiment-negative {
+    border-left-width: 5px !important;
+  }
+  
+  .moodscope-sentiment-indicator {
+    border-width: 3px !important;
+    font-weight: 700 !important;
+  }
+  
+  .moodscope-fab,
+  .moodscope-filter-fab {
+    box-shadow: var(--moodscope-elevation4) !important;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .moodscope-highlighted,
+  .moodscope-sentiment-indicator,
+  .moodscope-fab,
+  .moodscope-filter-fab,
+  .moodscope-filter-option {
+    transition: none !important;
+    animation: none !important;
+  }
+  
+  .moodscope-highlighted:hover,
+  .moodscope-sentiment-indicator:hover,
+  .moodscope-fab:hover,
+  .moodscope-filter-fab:hover {
+    transform: none !important;
+  }
+}
+
+/* Print styles */
+@media print {
+  .moodscope-sentiment-indicator,
+  .moodscope-fab,
+  .moodscope-filter-fab,
+  .moodscope-filter-menu {
+    display: none !important;
+  }
+  
+  .moodscope-highlighted,
+  .moodscope-positive,
+  .moodscope-sentiment-positive,
+  .moodscope-neutral,
+  .moodscope-sentiment-neutral,
+  .moodscope-negative,
+  .moodscope-sentiment-negative {
+    background-color: transparent !important;
+    border-left: 3px solid #000 !important;
+    box-shadow: none !important;
+  }
+  
+  /* Ensure text remains readable in print */
+  .moodscope-positive::before,
+  .moodscope-sentiment-positive::before {
+    content: '[+] ';
+    font-weight: bold;
+  }
+  
+  .moodscope-neutral::before,
+  .moodscope-sentiment-neutral::before {
+    content: '[~] ';
+    font-weight: bold;
+  }
+  
+  .moodscope-negative::before,
+  .moodscope-sentiment-negative::before {
+    content: '[-] ';
+    font-weight: bold;
+  }
+}
