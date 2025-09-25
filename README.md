@@ -10,12 +10,12 @@
 ## Extention Preview
 
 <p align="left">
-  <img src="https://raw.githubusercontent.com/la-b-ib/MoodScope/main/preview/img/desktop.png" width="50%" />
+  <img src="https://raw.githubusercontent.com/la-b-ib/MoodScope/main/preview/img/desktop.png" width="49%" />
   <img src="https://raw.githubusercontent.com/la-b-ib/MoodScope/main/preview/img/desktop%20(1).png" width="49%" />    
 </p>
 <p align="left">
   <img src="https://raw.githubusercontent.com/la-b-ib/MoodScope/main/preview/img/desktop%20(2).png" width="49%" />
-  <img src="https://raw.githubusercontent.com/la-b-ib/MoodScope/main/preview/img/desktop%20(3).png" width="50%" />    
+  <img src="https://raw.githubusercontent.com/la-b-ib/MoodScope/main/preview/img/desktop%20(3).png" width="49%" />    
 </p>
 
 ## Core Functionality
