@@ -128,7 +128,7 @@ class SentimentEngine {
 ```
 <hr>
 
-## 🔧 Development Setup
+## Development Setup
 
 #### Prerequisites
 - Chrome Browser (v88+)
