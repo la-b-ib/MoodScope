@@ -31,9 +31,11 @@
 8. **Real Site Detection** - Chrome tabs API integration
 9. **Performance Optimization** - Efficient memory usage and background processing
 
-## 🏗️ Technical Architecture
+<hr>
 
-### Manifest V3 Structure
+## Technical Architecture
+
+#### Manifest V3 Structure
 ```
 moodscope/
 ├── manifest.json              # Extension configuration and permissions
@@ -60,28 +62,7 @@ moodscope/
 └── icons/                   # Extension icons (16, 32, 48, 128px)
 ```
 
-### Core Classes
-
-#### MoodScopePro (popup.js)
-```javascript
-class MoodScopePro {
-    constructor() {
-        this.data = {
-            analyses: [],      // Historical analysis data
-            keywords: [],      // User-defined keywords
-            settings: {},      // User preferences
-            stats: {}          // Analytics and statistics
-        };
-    }
-}
-```
-
-**Key Methods:**
-- `analyzePage()` - Advanced sentiment analysis with 2s processing
-- `toggleAutoAnalysis()` - Background analysis management
-- `exportData(type)` - JSON data export (analytics/history/backup)
-- `updateAnalytics()` - Real-time statistics calculation
-- `getCurrentSite()` - Chrome tabs API integration
+<hr>
 
 #### SentimentEngine (sentiment-engine.js)
 ```javascript
@@ -97,37 +78,26 @@ class SentimentEngine {
     }
 }
 ```
+<hr>
 
-**Analysis Features:**
+## **Analysis Features:**
 - Lexicon-based sentiment scoring
 - Context-aware intensity detection
 - Negation handling and phrase analysis
 - Custom keyword integration
 - Confidence scoring (0-100)
 
-#### Platform Content Scripts
-Each social media platform has dedicated content scripts:
+<hr>
 
-**TwitterMoodScope** (`twitter.js`)
-- Tweet and reply sentiment analysis
-- Real-time timeline monitoring
-- Thread sentiment aggregation
-- 373 lines of Twitter-specific logic
+## Data Architecture
 
-**FacebookMoodScope** (`facebook.js`)
-- Post and comment analysis
-- Facebook-specific DOM handling
-- News feed sentiment tracking
-- 470 lines of Facebook integration
-
-## 📊 Data Architecture
-
-### Storage Strategy
+#### Storage Strategy
 - **Local Storage**: Real-time analysis data, user preferences
 - **Chrome Storage Sync**: Cross-device settings synchronization
 - **Session Storage**: Temporary analysis state
-
-### Data Models
+<hr>
+  
+#### Data Models
 ```javascript
 // Analysis Entry
 {
@@ -146,47 +116,17 @@ Each social media platform has dedicated content scripts:
     siteStats: { facebook: 0, twitter: 0, instagram: 0, reddit: 0 }
 }
 ```
-
-## 🎨 UI/UX Design
-
-### Design System
-- **Typography**: Bungee font family for consistent branding
-- **Icons**: Google Material Icons with proper font-feature-settings
-- **Spacing**: 8px base unit scaling system
-- **Colors**: Professional gradient backgrounds with semantic color coding
-- **Layout**: 420x600px popup with responsive 4-tab navigation
-
-### Theme System
-```css
-:root {
-    --space-2: 8px;    /* Base spacing unit */
-    --space-4: 16px;   /* Component spacing */
-    --space-6: 24px;   /* Section spacing */
-    --primary: #2563eb;
-    --success: #10b981;
-    --warning: #f59e0b;
-    --danger: #ef4444;
-}
-```
-
-### Material Icons Integration
-Special CSS handling to prevent font conflicts:
-```css
-.material-icons {
-    font-family: 'Material Icons' !important;
-    font-feature-settings: 'liga' !important;
-    -webkit-font-smoothing: antialiased !important;
-}
-```
+<hr>
 
 ## 🔧 Development Setup
 
-### Prerequisites
+#### Prerequisites
 - Chrome Browser (v88+)
 - Node.js (optional, for development tools)
 - Git
+<hr>
 
-### Installation
+#### Installation
 ```bash
 # Clone repository
 git clone https://github.com/username/moodscope.git
@@ -198,8 +138,9 @@ cd moodscope
 3. Click "Load unpacked"
 4. Select the moodscope directory
 ```
+<hr>
 
-### Development Workflow
+#### Development Workflow
 ```bash
 # Make changes to source files
 # Reload extension in Chrome
@@ -209,10 +150,11 @@ chrome://extensions/ → Click "Reload" button
 # Navigate to Twitter, Facebook, Instagram, LinkedIn, Reddit, YouTube
 # Open extension popup to verify functionality
 ```
+<hr>
 
-## 🌐 Platform Integration
+##  Platform Integration
 
-### Supported Platforms
+
 | Platform | Status | Content Scripts | Features |
 |----------|--------|----------------|----------|
 | Twitter/X | ✅ Full | `twitter.js` | Timeline, tweets, replies |
@@ -221,8 +163,9 @@ chrome://extensions/ → Click "Reload" button
 | LinkedIn | ✅ Full | `linkedin.js` | Professional posts, articles |
 | Reddit | ✅ Full | `reddit.js` | Posts, comments, threads |
 | YouTube | ✅ Full | `youtube.js` | Video comments, descriptions |
+<hr>
 
-### Content Script Architecture
+## Content Script Architecture
 Each platform implements:
 - **DOM Monitoring**: MutationObserver for dynamic content
 - **Element Detection**: Platform-specific selectors
@@ -230,7 +173,9 @@ Each platform implements:
 - **UI Integration**: Non-intrusive sentiment indicators
 - **Performance Optimization**: Debounced processing and memory management
 
-## 📈 Analytics & Reporting
+<hr>
+
+## Analytics & Reporting
 
 ### Available Analytics
 - **Daily Analysis Count**: Today's sentiment analyses
