@@ -177,19 +177,22 @@ Each platform implements:
 
 ## Analytics & Reporting
 
-### Available Analytics
+#### Available Analytics
 - **Daily Analysis Count**: Today's sentiment analyses
 - **Weekly Average**: 7-day sentiment trend
 - **Positivity Percentage**: Ratio of positive vs negative sentiment
 - **Platform Distribution**: Per-site analysis statistics
 - **Historical Trends**: Time-series sentiment data
+<hr>
 
-### Export Options
+#### Export Options
 1. **Analytics Export**: Statistics and metadata (JSON)
 2. **History Export**: Complete analysis history (JSON)
 3. **Full Backup**: All user data and settings (JSON)
 
-### Data Format Example
+<hr>
+
+#### Data Format Example
 ```json
 {
   "stats": {
@@ -206,16 +209,9 @@ Each platform implements:
   "totalAnalyses": 127
 }
 ```
+<hr>
 
-## 🔔 Notification System
-
-### Alert Types
-- **Sentiment Threshold**: Negative sentiment detection
-- **Keyword Alerts**: Custom keyword monitoring  
-- **Analysis Complete**: Real-time processing notifications
-- **System Status**: Extension state changes
-
-### Notification Configuration
+#### Notification Configuration
 ```javascript
 notifications: {
     enabled: boolean,
@@ -223,30 +219,37 @@ notifications: {
     keywordAlerts: boolean
 }
 ```
+<hr>
 
 ## ⚡ Performance Optimizations
 
-### Background Processing
+#### Background Processing
 - **Service Worker**: Efficient background task management
 - **Debounced Analysis**: Prevents excessive API calls
 - **Memory Management**: Automatic cleanup of processed content
 - **Storage Optimization**: Compressed data structures
 
-### Content Script Efficiency
+<hr>
+
+#### Content Script Efficiency
 - **Intersection Observer**: Lazy-load analysis for visible content
 - **Mutation Observer**: Efficient DOM change detection  
 - **Set-based Deduplication**: Prevents duplicate processing
 - **Throttled Execution**: Rate-limited analysis to prevent performance issues
 
-## 🛡️ Security & Privacy
+<hr>
 
-### Data Handling
+## Security & Privacy
+
+#### Data Handling
 - **Local Storage Only**: No external data transmission
 - **User Consent**: Explicit permission for all features
 - **Minimal Permissions**: Only required Chrome APIs
 - **Content Isolation**: Sandboxed content script execution
 
-### Permissions Explained
+<hr>
+
+#### Permissions Explained
 ```json
 {
   "permissions": [
@@ -258,10 +261,11 @@ notifications: {
   ]
 }
 ```
+<hr>
 
-## 🧪 Testing & Quality Assurance
+##  Testing & Quality Assurance
 
-### Manual Testing Checklist
+#### Manual Testing Checklist
 - [ ] Extension loads without errors
 - [ ] All 15+ features function correctly
 - [ ] Material Icons display properly
@@ -271,14 +275,18 @@ notifications: {
 - [ ] Content scripts work on all platforms
 - [ ] Performance remains smooth during analysis
 
-### Browser Compatibility
+<hr>
+
+#### Browser Compatibility
 - Chrome 88+ (Manifest V3 support)
 - Edge 88+ (Chromium-based)
 - Other Chromium browsers
 
-## 📝 Configuration Files
+<hr>
 
-### manifest.json
+## Configuration Files
+
+#### manifest.json
 ```json
 {
   "manifest_version": 3,
@@ -292,23 +300,29 @@ notifications: {
 }
 ```
 
-## 🚦 API Reference
+<hr>
 
-### Chrome Extension APIs Used
+##  API Reference
+
+#### Chrome Extension APIs Used
 - `chrome.storage.local` - Local data persistence  
 - `chrome.storage.sync` - Cross-device settings sync
 - `chrome.tabs` - Real site detection and tab management
 - `chrome.notifications` - System notification display
 - `chrome.runtime` - Message passing between components
 
-### Internal APIs
+<hr>
+
+#### Internal APIs
 - `MoodScopePro.analyzePage()` - Trigger sentiment analysis
 - `SentimentEngine.analyzeSentiment(text)` - Core analysis function
 - `NotificationSystem.showAlert(type, message)` - Display notifications
 
-## 🎯 Future Roadmap
+<hr>
 
-### Planned Features
+## Future Roadmap
+
+#### Planned Features
 - [ ] Machine learning sentiment model integration
 - [ ] Real-time sentiment trend visualization
 - [ ] Multi-language sentiment support
@@ -318,37 +332,15 @@ notifications: {
 - [ ] Custom notification webhooks
 - [ ] Sentiment history export to CSV
 
-### Performance Improvements
+#### Performance Improvements
 - [ ] WebAssembly sentiment engine
 - [ ] IndexedDB for large datasets
 - [ ] Background sync optimization
 - [ ] Reduced memory footprint
 
-## 🤝 Contributing
 
-### Development Guidelines
-1. Follow existing code structure and naming conventions
-2. Maintain Manifest V3 compatibility
-3. Ensure Material Icons display correctly
-4. Test across all supported platforms
-5. Update documentation for new features
-
-### Code Style
-- **JavaScript**: ES6+ classes and async/await
-- **CSS**: BEM methodology with custom properties
-- **HTML**: Semantic markup with accessibility considerations
-
-## 📄 License
-
-MIT License - see [LICENSE](LICENSE) for details
-
-## 👨‍💻 Author
-
-**Labib Bin Shahed**
-- Professional Chrome Extension Developer
-- Sentiment Analysis Specialist
-- UI/UX Designer
 
 ---
 
-*MoodScope represents a production-ready Chrome extension with enterprise-level features, comprehensive social media integration, and professional UI/UX design. The codebase demonstrates advanced Chrome extension development techniques, efficient data management, and scalable architecture suitable for commercial deployment.*
+**MoodScope represents a production-ready Chrome extension with enterprise-level features, comprehensive social media integration, and professional UI/UX design. The codebase demonstrates advanced Chrome extension development techniques, efficient data management, and scalable architecture suitable for commercial deployment.**
+<hr>
