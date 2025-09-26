@@ -18,7 +18,7 @@
   <img src="https://raw.githubusercontent.com/la-b-ib/MoodScope/main/preview/img/desktop%20(3).png" width="49%" />    
 </p>
 
-## Core Functionality
+## Core Functionality <a href=""><img align="right" width="150" height="150" src="https://raw.githubusercontent.com/la-b-ib/MoodScope/main/preview/gif/idea.gif"></a> 
 
 - **Real-time Sentiment Analysis**: Advanced sentiment detection across 6 major social platforms
 - **Multi-Platform Integration**: Twitter/X, Facebook, Instagram, LinkedIn, Reddit, YouTube
@@ -29,7 +29,8 @@
 - **Notification System**: Smart alerts with keyword monitoring and sentiment thresholds
 <hr>
   
-## Professional Features
+## Professional Features <a href=""><img align="right" width="150" height="150" src="https://raw.githubusercontent.com/la-b-ib/MoodScope/main/preview/gif/hands-holding-signs.gif"></a> 
+
 
 1. **Auto-Analysis Mode** - Background processing with 30-second intervals
 2. **Keyword Tracking** - Custom keyword monitoring and alerts
