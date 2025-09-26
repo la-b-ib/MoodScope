@@ -379,7 +379,9 @@ notifications: {
 
 
 ---
+## <a href=""><img align="right" width="150" height="150" src="https://raw.githubusercontent.com/la-b-ib/MoodScope/main/preview/gif/quote.gif"></a>
 
-**MoodScope represents a production-ready Chrome extension with enterprise-level features, comprehensive social media integration, and professional UI/UX design. The codebase demonstrates advanced Chrome extension development techniques, efficient data management, and scalable architecture suitable for commercial deployment.**
+**MoodScope represents a production-ready Chrome extension with enterprise-level features, comprehensive social media integration, and professional UI/UX design. The codebase demonstrates advanced Chrome extension development techniques, efficient data management, and scalable architecture suitable for commercial deployment.** 
+
 <hr>
 
