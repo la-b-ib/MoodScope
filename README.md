@@ -11,16 +11,8 @@
   
 ## Professional Features <a href=""><img align="right" width="150" height="150" src="https://raw.githubusercontent.com/la-b-ib/MoodScope/main/preview/gif/hands-holding-signs.gif"></a> 
 
+Auto-analysis (30s), keyword tracking, settings/history management, localStorage sync, smart alerts, site detection, optimized performance.
 
-1. **Auto-Analysis Mode** - Background processing with 30-second intervals
-2. **Keyword Tracking** - Custom keyword monitoring and alerts
-3. **Settings Management** - Comprehensive configuration options
-4. **History Management** - Analysis history with timestamps and metadata
-5. **Data Persistence** - LocalStorage with automatic sync
-6. **Notification System** - Smart alerts with customizable thresholds
-7. **Advanced Statistics** - Weekly averages, positivity metrics, site-specific data
-8. **Real Site Detection** - Chrome tabs API integration
-9. **Performance Optimization** - Efficient memory usage and background processing
 
 <hr>
 
@@ -28,11 +20,8 @@
 
 
 ## **Analysis Features:**
-- Lexicon-based sentiment scoring
-- Context-aware intensity detection
-- Negation handling and phrase analysis
-- Custom keyword integration
-- Confidence scoring (0-100)
+Sentiment analysis with lexicon scoring, intensity detection, negation/phrase handling, custom keywords, and confidence scoring.
+
 
 <hr>
 
@@ -41,40 +30,19 @@
 ##  Platform Integration
 
 
-| Platform | Status | Content Scripts | Features |
-|----------|--------|----------------|----------|
-| Twitter/X | ✅ Full | `twitter.js` | Timeline, tweets, replies |
-| Facebook | ✅ Full | `facebook.js` | Posts, comments, news feed |
-| Instagram | ✅ Full | `instagram.js` | Posts, stories, comments |
-| LinkedIn | ✅ Full | `linkedin.js` | Professional posts, articles |
-| Reddit | ✅ Full | `reddit.js` | Posts, comments, threads |
-| YouTube | ✅ Full | `youtube.js` | Video comments, descriptions |
-<hr>
+All supported platforms run with full integration: Twitter/X (`twitter.js`) for timelines, tweets, and replies; Facebook (`facebook.js`) for posts, comments, and news feeds; Instagram (`instagram.js`) for posts, stories, and comments; LinkedIn (`linkedin.js`) for professional posts and articles; Reddit (`reddit.js`) for posts, comments, and threads; and YouTube (`youtube.js`) for video comments and descriptions.
 
 ## Content Script Architecture
-Each platform implements:
-- **DOM Monitoring**: MutationObserver for dynamic content
-- **Element Detection**: Platform-specific selectors
-- **Sentiment Processing**: Text extraction and analysis
-- **UI Integration**: Non-intrusive sentiment indicators
-- **Performance Optimization**: Debounced processing and memory management
+
+Each platform implements DOM monitoring via MutationObserver, element detection with platform-specific selectors, sentiment processing through text extraction and analysis, UI integration with non-intrusive indicators, and performance optimization using debounced processing and memory management.
 
 <hr>
 
 ## Analytics & Reporting
 
 #### Available Analytics
-- **Daily Analysis Count**: Today's sentiment analyses
-- **Weekly Average**: 7-day sentiment trend
-- **Positivity Percentage**: Ratio of positive vs negative sentiment
-- **Platform Distribution**: Per-site analysis statistics
-- **Historical Trends**: Time-series sentiment data
-<hr>
+Provides sentiment analytics including daily counts, weekly averages, positivity ratios, platform distribution, and historical trends, with export options for analytics, history, and full backups in JSON.
 
-#### Export Options
-1. **Analytics Export**: Statistics and metadata (JSON)
-2. **History Export**: Complete analysis history (JSON)
-3. **Full Backup**: All user data and settings (JSON)
 
 <hr>
 
